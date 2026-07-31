@@ -6,6 +6,7 @@ import { AuthProvider } from '@/lib/context/auth-context';
 import { ClinicProvider } from '@/lib/context/clinic-context';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
+import PwaInstallPrompt from '@/components/PwaInstallPrompt';
 import { usePathname } from 'next/navigation';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -13,14 +14,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
 
   // Pages that don't need sidebar (Public TV display, status, login)
-  const isBareLayout = ['/login', '/queue/display', '/status', '/privacy'].includes(pathname);
+  const isBareLayout = ['/login', '/queue/display', '/status', '/privacy'].includes(pathname) || pathname.startsWith('/c/');
 
   return (
     <html lang="ar" dir="rtl">
       <head>
         <title>مستقبل العيادة الذكي | Clinic AI Receptionist</title>
         <meta name="description" content="نظام مستقبل العيادة الذكي المعتمد على الذكاء الاصطناعي وواتساب لمراكز التجميل والعيادات الطبية" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta name="theme-color" content="#0d9488" />
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="bg-slate-50 text-slate-900 antialiased min-h-screen">
@@ -39,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </div>
               </div>
             )}
+            <PwaInstallPrompt />
           </ClinicProvider>
         </AuthProvider>
       </body>
