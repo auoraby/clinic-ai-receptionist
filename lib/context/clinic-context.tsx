@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState } from 'react';
-import { ClinicData } from '../mock-data';
+import { ClinicData, INITIAL_CLINICS } from '../mock-data';
 import { clinicStore } from '../store';
 
 interface ClinicContextType {
