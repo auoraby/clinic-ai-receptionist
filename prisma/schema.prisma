@@ -1,0 +1,216 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Clinic {
+  id                   String            @id @default(uuid())
+  name                 String
+  slug                 String            @unique
+  doctorName           String
+  specialty            String
+  phone                String
+  whatsappPhoneId      String?           @unique
+  whatsappVerifyToken  String?
+  whatsappAccessToken  String?
+  googleCalendarId     String?
+  address              String
+  mapsUrl              String?
+  workingDaysJson      String            // e.g. ["Sunday","Monday","Tuesday","Wednesday","Thursday"]
+  workingHoursStart    String            @default("09:00")
+  workingHoursEnd      String            @default("17:00")
+  slotDurationMinutes  Int               @default(30)
+  bufferTimeMinutes    Int               @default(10)
+  avgConsultationMins  Int               @default(20)
+  isActive             Boolean           @default(true)
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+
+  users                User[]
+  patients             Patient[]
+  appointmentTypes     AppointmentType[]
+  appointments         Appointment[]
+  queueEntries         QueueEntry[]
+  conversations        Conversation[]
+  messages             Message[]
+  messageTemplates     MessageTemplate[]
+  reminderJobs         ReminderJob[]
+  webhookEvents        WebhookEvent[]
+  auditLogs            AuditLog[]
+}
+
+model User {
+  id            String    @id @default(uuid())
+  clinicId      String?
+  clinic        Clinic?   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  email         String    @unique
+  passwordHash  String
+  name          String
+  role          String    // SUPER_ADMIN, DOCTOR, RECEPTIONIST
+  phone         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  auditLogs     AuditLog[]
+}
+
+model Patient {
+  id                      String         @id @default(uuid())
+  clinicId                String
+  clinic                  Clinic         @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  name                    String
+  phone                   String
+  whatsappId              String?
+  communicationPref       String         @default("WHATSAPP")
+  notes                   String?
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+
+  appointments            Appointment[]
+  queueEntries            QueueEntry[]
+  conversations           Conversation[]
+}
+
+model AppointmentType {
+  id              String        @id @default(uuid())
+  clinicId        String
+  clinic          Clinic        @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  name            String
+  description     String?
+  durationMinutes Int           @default(30)
+  isPublic        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+
+  appointments    Appointment[]
+}
+
+model Appointment {
+  id                String          @id @default(uuid())
+  clinicId          String
+  clinic            Clinic          @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  patientId         String
+  patient           Patient         @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  appointmentTypeId String?
+  appointmentType   AppointmentType? @relation(fields: [appointmentTypeId], references: [id])
+  
+  startDateTime     DateTime
+  endDateTime       DateTime
+  status            String          // AWAITING_DETAILS, AWAITING_CONFIRMATION, CONFIRMED, PATIENT_ARRIVED, WAITING, IN_CONSULTATION, COMPLETED, CANCELLED, NO_SHOW
+  googleEventId     String?
+  notes             String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  queueEntries      QueueEntry[]
+  reminderJobs      ReminderJob[]
+}
+
+model QueueEntry {
+  id                   String      @id @default(uuid())
+  clinicId             String
+  clinic               Clinic      @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  patientId            String
+  patient              Patient     @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  appointmentId        String?
+  appointment          Appointment? @relation(fields: [appointmentId], references: [id])
+  
+  queueNumber          Int
+  status               String      // WAITING, IN_CONSULTATION, COMPLETED, CANCELLED
+  estimatedWaitMinutes Int         @default(15)
+  checkInTime          DateTime    @default(now())
+  callTime             DateTime?
+  finishTime           DateTime?
+  notifiedApproaching  Boolean     @default(false)
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+}
+
+model Conversation {
+  id               String    @id @default(uuid())
+  clinicId         String
+  clinic           Clinic    @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  patientId        String
+  patient          Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  
+  isHumanTakeover  Boolean   @default(false)
+  lastMessageText  String?
+  lastMessageTime  DateTime  @default(now())
+  unreadCount      Int       @default(0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  messages         Message[]
+}
+
+model Message {
+  id              String       @id @default(uuid())
+  clinicId        String
+  clinic          Clinic       @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  senderType      String       // PATIENT, BOT, STAFF
+  senderName      String?
+  content         String
+  metaMessageId   String?      @unique
+  deliveryStatus  String       @default("SENT") // SCHEDULED, SENT, DELIVERED, READ, FAILED
+  isMedicalSafeguardRefusal Boolean @default(false)
+  createdAt       DateTime     @default(now())
+}
+
+model MessageTemplate {
+  id              String   @id @default(uuid())
+  clinicId        String
+  clinic          Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  name            String
+  metaTemplateId  String
+  category        String   @default("CONFIRMATION") // CONFIRMATION, REMINDER, QUEUE_ALERT, LOCATION
+  language        String   @default("ar")
+  status          String   @default("APPROVED") // APPROVED, PENDING, REJECTED
+  bodyPattern     String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ReminderJob {
+  id              String      @id @default(uuid())
+  clinicId        String
+  clinic          Clinic      @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  appointmentId   String
+  appointment     Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  
+  reminderType    String      // HOURS_24, HOURS_2
+  scheduledTime   DateTime
+  status          String      @default("SCHEDULED") // SCHEDULED, SENT, FAILED, CANCELLED
+  sentAt          DateTime?
+  createdAt       DateTime    @default(now())
+}
+
+model WebhookEvent {
+  id              String   @id @default(uuid())
+  clinicId        String?
+  clinic          Clinic?  @relation(fields: [clinicId], references: [id])
+  eventId         String   @unique
+  provider        String   @default("META_WHATSAPP")
+  payloadJson     String
+  status          String   @default("PROCESSED") // PROCESSED, DUPLICATE, FAILED
+  createdAt       DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  clinicId    String?
+  clinic      Clinic?  @relation(fields: [clinicId], references: [id])
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  userName    String
+  userRole    String
+  action      String
+  details     String
+  ipAddress   String   @default("127.0.0.1")
+  createdAt   DateTime @default(now())
+}
