@@ -23,7 +23,8 @@ import {
   HelpCircle,
   Bot,
   ExternalLink,
-  Globe
+  Globe,
+  Sparkles
 } from 'lucide-react';
 
 export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -39,6 +40,7 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
     { label: 'طابور الانتظار', href: '/queue', icon: Users },
     { label: 'شاشة الانتظار العامة (TV)', href: '/queue/display', icon: Monitor, isPublic: true },
     { label: 'المحادثات والتدخل البشري', href: '/conversations', icon: MessageSquareText },
+    { label: 'أداة إضافة عيادة جديدة', href: '/setup-wizard', icon: Sparkles, isNew: true },
     { label: 'سجل المرضى الإداري', href: '/patients', icon: UserSquare2 },
     { label: 'قوالب الواتساب', href: '/templates', icon: FileText },
     { label: 'التذكيرات الآلية', href: '/reminders', icon: BellRing },
