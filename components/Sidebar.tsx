@@ -20,7 +20,10 @@ import {
   Monitor, 
   Lock,
   Building,
-  HelpCircle
+  HelpCircle,
+  Bot,
+  ExternalLink,
+  Globe
 } from 'lucide-react';
 
 export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -39,6 +42,8 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
     { label: 'سجل المرضى الإداري', href: '/patients', icon: UserSquare2 },
     { label: 'قوالب الواتساب', href: '/templates', icon: FileText },
     { label: 'التذكيرات الآلية', href: '/reminders', icon: BellRing },
+    { label: 'محاكي تجربة الواتساب', href: '/test-bot', icon: Bot, isNew: true },
+    { label: 'دليل العيادات العام (Public)', href: '/clinics', icon: Globe, isPublic: true },
     { label: 'إعدادات العيادة والمعلومات', href: '/settings/clinic', icon: Settings },
     { label: 'ربط Meta & Google', href: '/settings/integrations', icon: Share2 },
     ...(isSuperAdmin ? [{ label: 'إدارة العيادات (Super Admin)', href: '/admin/clinics', icon: Building }] : []),
@@ -87,6 +92,11 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
                 {item.isPublic && (
                   <span className="mr-auto text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-bold">
                     عامة
+                  </span>
+                )}
+                {item.isNew && (
+                  <span className="mr-auto text-[9px] bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded font-bold">
+                    جديد
                   </span>
                 )}
               </Link>
