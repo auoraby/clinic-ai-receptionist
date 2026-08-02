@@ -17,6 +17,7 @@ import {
   Building,
   ShieldCheck
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function ClinicOnboardingWizardPage() {
   const router = useRouter();
@@ -86,241 +87,249 @@ export default function ClinicOnboardingWizardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 dir-rtl font-arabic flex flex-col justify-between p-4 sm:p-8">
+    <div className="page-wrapper min-h-screen bg-[#F7F8FA] flex flex-col justify-center p-4 sm:p-8 animate-fade-up">
       
-      <div className="max-w-2xl mx-auto w-full space-y-6">
+      <div className="max-w-2xl mx-auto w-full space-y-8">
         
         {/* Wizard Header */}
-        <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-500 to-limeAccent-500 flex items-center justify-center text-navy-950 mx-auto shadow-xl">
+        <div className="text-center space-y-3">
+          <div className="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center text-white mx-auto shadow-lg shadow-blue-600/20">
             <Bot className="w-8 h-8" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
             أداة تهيئة الواتساب الآلي للعيادة في 3 خطوات
           </h1>
-          <p className="text-xs text-slate-500">
+          <p className="text-sm text-slate-500 font-medium">
             أدخل بيانات الدكتور والعيادة وقم بتفعيل ردود الواتساب التلقائية فوراً
           </p>
         </div>
 
         {/* Step Stepper Progress */}
-        <div className="flex items-center justify-between max-w-md mx-auto px-4 text-xs font-bold">
-          <div className={`flex items-center gap-1.5 ${step >= 1 ? 'text-teal-600' : 'text-slate-400'}`}>
-            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${step >= 1 ? 'bg-teal-600 text-white' : 'bg-slate-200'}`}>1</span>
-            <span>بيانات العيادة</span>
+        <div className="flex items-center justify-between max-w-md mx-auto px-4 text-xs font-bold relative">
+          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-200 -z-10 -translate-y-1/2 rounded-full" />
+          <div className="absolute top-1/2 right-0 h-0.5 bg-blue-600 -z-10 -translate-y-1/2 rounded-full transition-all duration-500" style={{ width: step === 1 ? '0%' : step === 2 ? '50%' : '100%' }} />
+
+          <div className={`flex flex-col items-center gap-2 bg-[#F7F8FA] px-2 ${step >= 1 ? 'text-blue-600' : 'text-slate-400'}`}>
+            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-sm transition-colors ${step >= 1 ? 'bg-blue-600 text-white shadow-blue-600/30' : 'bg-slate-200 text-slate-500'}`}>1</span>
+            <span className="text-[10px] sm:text-xs">بيانات العيادة</span>
           </div>
-          <div className="h-0.5 flex-1 mx-2 bg-slate-200" />
-          <div className={`flex items-center gap-1.5 ${step >= 2 ? 'text-teal-600' : 'text-slate-400'}`}>
-            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${step >= 2 ? 'bg-teal-600 text-white' : 'bg-slate-200'}`}>2</span>
-            <span>المواعيد والخدمات</span>
+          <div className={`flex flex-col items-center gap-2 bg-[#F7F8FA] px-2 ${step >= 2 ? 'text-blue-600' : 'text-slate-400'}`}>
+            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-sm transition-colors ${step >= 2 ? 'bg-blue-600 text-white shadow-blue-600/30' : 'bg-slate-200 text-slate-500'}`}>2</span>
+            <span className="text-[10px] sm:text-xs">المواعيد والخدمات</span>
           </div>
-          <div className="h-0.5 flex-1 mx-2 bg-slate-200" />
-          <div className={`flex items-center gap-1.5 ${step === 3 ? 'text-teal-600' : 'text-slate-400'}`}>
-            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${step === 3 ? 'bg-teal-600 text-white' : 'bg-slate-200'}`}>3</span>
-            <span>تفعيل الواتساب</span>
+          <div className={`flex flex-col items-center gap-2 bg-[#F7F8FA] px-2 ${step === 3 ? 'text-blue-600' : 'text-slate-400'}`}>
+            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-sm transition-colors ${step === 3 ? 'bg-blue-600 text-white shadow-blue-600/30' : 'bg-slate-200 text-slate-500'}`}>3</span>
+            <span className="text-[10px] sm:text-xs">تفعيل الواتساب</span>
           </div>
         </div>
 
         {/* Step 1 Form */}
         {step === 1 && (
-          <form onSubmit={handleNextStep1} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-4">
-            <h3 className="font-extrabold text-sm text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
-              <Stethoscope className="w-4 h-4 text-teal-600" />
+          <motion.form initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} onSubmit={handleNextStep1} className="card p-6 sm:p-8 space-y-5">
+            <h3 className="font-extrabold text-base text-slate-900 border-b border-slate-100 pb-4 flex items-center gap-2">
+              <Stethoscope className="w-5 h-5 text-blue-600" />
               الخطوة 1: بيانات الطبيب والعيادة
             </h3>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">اسم العيادة / المركز الطبي</label>
-              <input
-                type="text"
-                value={clinicName}
-                onChange={(e) => setClinicName(e.target.value)}
-                placeholder="مثال: عيادة د. حسام الطبي للأسنان والتجميل"
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">اسم الدكتور المعتمد</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">اسم العيادة / المركز الطبي</label>
                 <input
                   type="text"
-                  value={doctorName}
-                  onChange={(e) => setDoctorName(e.target.value)}
-                  placeholder="أ.د. حسام الدين"
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
+                  value={clinicName}
+                  onChange={(e) => setClinicName(e.target.value)}
+                  placeholder="مثال: عيادة د. حسام الطبي للأسنان والتجميل"
+                  className="input w-full"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">اسم الدكتور المعتمد</label>
+                  <input
+                    type="text"
+                    value={doctorName}
+                    onChange={(e) => setDoctorName(e.target.value)}
+                    placeholder="أ.د. حسام الدين"
+                    className="input w-full"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">التخصص الدقيق</label>
+                  <input
+                    type="text"
+                    value={specialty}
+                    onChange={(e) => setSpecialty(e.target.value)}
+                    placeholder="استشاري جراحة وتجميل الأسنان"
+                    className="input w-full"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">رقم هاتف الواتساب للعيادة</label>
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+201099887766"
+                  className="input w-full"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">التخصص الدقيق</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">عنوان العيادة</label>
                 <input
                   type="text"
-                  value={specialty}
-                  onChange={(e) => setSpecialty(e.target.value)}
-                  placeholder="استشاري جراحة وتجميل الأسنان"
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
-                  required
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="القاهرة المعادي - شارع النصر"
+                  className="input w-full"
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">رقم هاتف الواتساب للعيادة</label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+201099887766"
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">عنوان العيادة</label>
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="القاهرة المعادي - شارع النصر"
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
-              />
-            </div>
-
-            <div className="pt-2 flex justify-end">
+            <div className="pt-4 flex justify-end">
               <button
                 type="submit"
-                className="px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow flex items-center gap-2"
+                className="btn btn-primary px-8"
               >
-                التالي: ضبط المواعيد والخدمات <ArrowLeft className="w-4 h-4" />
+                التالي: ضبط المواعيد والخدمات <ArrowLeft className="w-4 h-4 mr-2" />
               </button>
             </div>
-          </form>
+          </motion.form>
         )}
 
         {/* Step 2 Form */}
         {step === 2 && (
-          <form onSubmit={handleFinishSetup} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-4">
-            <h3 className="font-extrabold text-sm text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-teal-600" />
+          <motion.form initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} onSubmit={handleFinishSetup} className="card p-6 sm:p-8 space-y-5">
+            <h3 className="font-extrabold text-base text-slate-900 border-b border-slate-100 pb-4 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-blue-600" />
               الخطوة 2: أوقات العمل ومدة الموعد
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">وقت بدء العمل اليومي</label>
+                  <input
+                    type="time"
+                    value={workStart}
+                    onChange={(e) => setWorkStart(e.target.value)}
+                    className="input w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">وقت انتهاء العمل اليومي</label>
+                  <input
+                    type="time"
+                    value={workEnd}
+                    onChange={(e) => setWorkEnd(e.target.value)}
+                    className="input w-full"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">وقت بدء العمل اليومي</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">مدة الكشف الافتراضية (بالدقائق)</label>
                 <input
-                  type="time"
-                  value={workStart}
-                  onChange={(e) => setWorkStart(e.target.value)}
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
+                  type="number"
+                  value={slotDuration}
+                  onChange={(e) => setSlotDuration(e.target.value)}
+                  className="input w-full"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">وقت انتهاء العمل اليومي</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">اسم الخدمة الرئيسية للحجز</label>
                 <input
-                  type="time"
-                  value={workEnd}
-                  onChange={(e) => setWorkEnd(e.target.value)}
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
+                  type="text"
+                  value={serviceName}
+                  onChange={(e) => setServiceName(e.target.value)}
+                  placeholder="كشف واستشارة تجميلية"
+                  className="input w-full"
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">مدة الكشف الافتراضية (بالدقائق)</label>
-              <input
-                type="number"
-                value={slotDuration}
-                onChange={(e) => setSlotDuration(e.target.value)}
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">اسم الخدمة الرئيسية للحجز</label>
-              <input
-                type="text"
-                value={serviceName}
-                onChange={(e) => setServiceName(e.target.value)}
-                placeholder="كشف واستشارة تجميلية"
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
-              />
-            </div>
-
-            <div className="pt-2 flex items-center justify-between">
+            <div className="pt-4 flex items-center justify-between">
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="px-4 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl"
+                className="btn btn-ghost"
               >
                 السابق
               </button>
 
               <button
                 type="submit"
-                className="px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow flex items-center gap-2"
+                className="btn btn-primary"
               >
-                <Sparkles className="w-4 h-4" /> إنشاء وتفعيل الواتساب الآلي فوراً
+                <Sparkles className="w-4 h-4 ml-2" /> إنشاء وتفعيل الواتساب الآلي فوراً
               </button>
             </div>
-          </form>
+          </motion.form>
         )}
 
         {/* Step 3: Success & Ready */}
         {step === 3 && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-emerald-200 shadow-2xl space-y-6 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-lg">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="card p-8 space-y-6 text-center border-emerald-200 border-2">
+            <div className="w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-lg shadow-emerald-600/10">
               <CheckCircle2 className="w-10 h-10" />
             </div>
 
             <div>
               <h2 className="text-2xl font-black text-slate-900">تم تفعيل مستقبل الواتساب الآلي لـ {clinicName}! 🎉</h2>
-              <p className="text-xs text-slate-500 mt-1">العيادة جاهزة الآن لاستقبال الحجوزات والرد الآلي 24 ساعة</p>
+              <p className="text-sm text-slate-500 mt-2 font-medium">العيادة جاهزة الآن لاستقبال الحجوزات والرد الآلي 24 ساعة</p>
             </div>
 
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-right text-xs space-y-3">
-              <div className="font-bold text-slate-800">بيانات الـ Webhook المخصصة للعيادة:</div>
+            <div className="p-5 bg-slate-50 border border-slate-200 rounded-2xl text-right text-sm space-y-3">
+              <div className="font-bold text-slate-800 flex items-center gap-2">
+                <Share2 className="w-4 h-4 text-blue-600" />
+                بيانات الـ Webhook المخصصة للعيادة:
+              </div>
               
               <div>
-                <span className="text-[11px] text-slate-500 block mb-0.5">Webhook Callback URL:</span>
+                <span className="text-xs text-slate-500 block mb-1 font-medium">Webhook Callback URL:</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
                     readOnly
                     value={webhookUrl}
-                    className="flex-1 p-2 bg-white border border-slate-200 rounded-lg text-xs font-mono dir-ltr text-left"
+                    className="input flex-1 font-mono dir-ltr text-left text-xs"
                   />
                   <button
                     onClick={() => copyToClipboard(webhookUrl)}
-                    className="px-3 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-bold flex items-center gap-1"
+                    className="btn bg-slate-200 hover:bg-slate-300 text-slate-800"
                   >
-                    <Copy className="w-3.5 h-3.5" /> {copied ? 'تم النسخ' : 'نسخ'}
+                    <Copy className="w-4 h-4 ml-1" /> {copied ? 'تم النسخ' : 'نسخ'}
                   </button>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <button
                 onClick={() => router.push('/dashboard')}
-                className="flex-1 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow"
+                className="btn btn-primary flex-1 py-3"
               >
                 الانتقال للوحة تحكم العيادة ←
               </button>
 
               <button
                 onClick={() => router.push('/test-bot')}
-                className="flex-1 py-3 bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs rounded-xl shadow"
+                className="btn bg-slate-900 hover:bg-slate-800 text-white flex-1 py-3"
               >
                 تجربة الرد الآلي في المحاكي 🤖
               </button>
             </div>
-          </div>
+          </motion.div>
         )}
 
       </div>

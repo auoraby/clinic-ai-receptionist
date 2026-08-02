@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useClinic } from '@/lib/context/clinic-context';
 import { clinicStore } from '@/lib/store';
 import { Settings, Save, MapPin, Clock, Stethoscope, Phone, CheckCircle2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function ClinicSettingsPage() {
   const { activeClinic, refreshClinics } = useClinic();
@@ -36,56 +37,58 @@ export default function ClinicSettingsPage() {
   };
 
   return (
-    <div className="space-y-6 dir-rtl">
+    <div className="page-wrapper animate-fade-up">
       
       {/* Header */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+      <div className="card p-6 flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
-            <Settings className="w-6 h-6 text-teal-600" />
+          <h1 className="text-xl font-black text-slate-900 flex items-center gap-2">
+            <Settings className="w-5 h-5 text-blue-600" />
             إعدادات العيادة والمعلومات الموثقة
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 mt-1 font-medium">
             إدخال وتحديث البيانات المعتمدة لـ {activeClinic.name} التي يتم الاعتماد عليها في الرد الآلي
           </p>
         </div>
 
         {savedSuccess && (
-          <span className="bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3.5 py-1.5 rounded-xl border border-emerald-300 flex items-center gap-1.5 animate-pulse">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" /> تم حفظ التغييرات بنجاح
+          <span className="badge badge-green px-3.5 py-1.5 flex items-center gap-1.5 animate-pulse text-xs">
+            <CheckCircle2 className="w-4 h-4" /> تم حفظ التغييرات بنجاح
           </span>
         )}
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSave} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+      <form onSubmit={handleSave} className="card p-6 sm:p-8 space-y-8">
         
         {/* Section 1: Doctor Profile */}
-        <div className="space-y-4 border-b border-slate-100 pb-5">
+        <div className="space-y-5 border-b border-slate-100 pb-8">
           <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-2">
-            <Stethoscope className="w-4 h-4 text-teal-600" />
+            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+              <Stethoscope className="w-4 h-4 text-blue-600" />
+            </div>
             بيانات الطبيب والتخصص
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">اسم الطبيب المعتمد</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">اسم الطبيب المعتمد</label>
               <input
                 type="text"
                 value={doctorName}
                 onChange={(e) => setDoctorName(e.target.value)}
-                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
+                className="input w-full"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">التخصص الطبي الدقيق</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">التخصص الطبي الدقيق</label>
               <input
                 type="text"
                 value={specialty}
                 onChange={(e) => setSpecialty(e.target.value)}
-                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
+                className="input w-full"
                 required
               />
             </div>
@@ -93,83 +96,87 @@ export default function ClinicSettingsPage() {
         </div>
 
         {/* Section 2: Address & Location */}
-        <div className="space-y-4 border-b border-slate-100 pb-5">
+        <div className="space-y-5 border-b border-slate-100 pb-8">
           <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-teal-600" />
+            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+              <MapPin className="w-4 h-4 text-blue-600" />
+            </div>
             العنوان ورابط الخرائط (Google Maps)
           </h3>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">عنوان العيادة التفصيلي</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">عنوان العيادة التفصيلي</label>
               <input
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
+                className="input w-full"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">رابط Google Maps التفاعلي</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">رابط Google Maps التفاعلي</label>
               <input
                 type="url"
                 value={mapsUrl}
                 onChange={(e) => setMapsUrl(e.target.value)}
-                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 dir-ltr text-left"
+                className="input w-full dir-ltr text-left"
               />
             </div>
           </div>
         </div>
 
         {/* Section 3: Working Hours & Slots */}
-        <div className="space-y-4 border-b border-slate-100 pb-5">
+        <div className="space-y-5 border-b border-slate-100 pb-8">
           <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-2">
-            <Clock className="w-4 h-4 text-teal-600" />
+            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+              <Clock className="w-4 h-4 text-blue-600" />
+            </div>
             ساعات العمل وطول مدة الموعد
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">بداية العمل اليومي</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">بداية العمل اليومي</label>
               <input
                 type="time"
                 value={workStart}
                 onChange={(e) => setWorkStart(e.target.value)}
-                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
+                className="input w-full"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">نهاية العمل اليومي</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">نهاية العمل اليومي</label>
               <input
                 type="time"
                 value={workEnd}
                 onChange={(e) => setWorkEnd(e.target.value)}
-                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
+                className="input w-full"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">مدة الكشف الافتراضية (بالدقائق)</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">مدة الكشف الافتراضية (بالدقائق)</label>
               <input
                 type="number"
                 value={slotDuration}
                 onChange={(e) => setSlotDuration(Number(e.target.value))}
-                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
+                className="input w-full"
               />
             </div>
           </div>
         </div>
 
         {/* Submit */}
-        <div className="flex justify-end">
+        <div className="flex justify-end pt-2">
           <button
             type="submit"
-            className="px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-teal-600/20 flex items-center gap-2 transition"
+            className="btn btn-primary px-8"
           >
-            <Save className="w-4 h-4" /> حفظ التغييرات وتحديث المساعد الآلي
+            <Save className="w-4 h-4 ml-2" /> حفظ التغييرات وتحديث المساعد الآلي
           </button>
         </div>
 

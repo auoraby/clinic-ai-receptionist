@@ -4,118 +4,161 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/context/auth-context';
-import { 
-  LayoutDashboard, 
-  CalendarDays, 
-  Calendar, 
-  Users, 
-  UserSquare2, 
-  MessageSquareText, 
-  FileText, 
-  BellRing, 
-  Settings, 
-  Share2, 
-  ShieldCheck, 
-  Activity, 
-  Monitor, 
-  Lock,
-  Building,
-  HelpCircle,
-  Bot,
-  ExternalLink,
-  Globe,
-  Sparkles
+import {
+  LayoutDashboard, CalendarDays, Calendar, Users, UserSquare2,
+  MessageSquareText, FileText, BellRing, Settings, Share2,
+  ShieldCheck, Activity, Monitor, Lock, Building, Bot,
+  Globe, Sparkles, ChevronRight, HelpCircle
 } from 'lucide-react';
+
+type NavItem = {
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  badge?: string;
+  badgeColor?: 'blue' | 'green' | 'amber';
+  superAdminOnly?: boolean;
+};
+
+type NavGroup = {
+  title: string;
+  items: NavItem[];
+};
+
+const navGroups: NavGroup[] = [
+  {
+    title: 'العمليات اليومية',
+    items: [
+      { label: 'لوحة التحكم',        href: '/dashboard',    icon: LayoutDashboard },
+      { label: 'المواعيد والحجوزات', href: '/appointments',  icon: CalendarDays },
+      { label: 'التقويم الأسبوعي',   href: '/calendar',     icon: Calendar },
+      { label: 'طابور الانتظار',      href: '/queue',        icon: Users },
+      { label: 'شاشة الانتظار (TV)', href: '/queue/display', icon: Monitor,
+        badge: 'عامة', badgeColor: 'amber' },
+    ],
+  },
+  {
+    title: 'الواتساب والمرضى',
+    items: [
+      { label: 'المحادثات الحية',    href: '/conversations',  icon: MessageSquareText },
+      { label: 'سجل المرضى',         href: '/patients',       icon: UserSquare2 },
+      { label: 'قوالب الرسائل',      href: '/templates',      icon: FileText },
+      { label: 'التذكيرات الآلية',   href: '/reminders',      icon: BellRing },
+      { label: 'محاكي الواتساب',     href: '/test-bot',       icon: Bot,
+        badge: 'جديد', badgeColor: 'green' },
+    ],
+  },
+  {
+    title: 'الإعداد والإدارة',
+    items: [
+      { label: 'معالج إضافة عيادة',  href: '/setup-wizard',          icon: Sparkles,
+        badge: 'جديد', badgeColor: 'blue' },
+      { label: 'دليل العيادات',      href: '/clinics',               icon: Globe,
+        badge: 'عامة', badgeColor: 'amber' },
+      { label: 'إعدادات العيادة',    href: '/settings/clinic',       icon: Settings },
+      { label: 'ربط Meta & Google',  href: '/settings/integrations', icon: Share2 },
+      { label: 'لوحة مدير النظام',   href: '/admin/clinics',         icon: Building,
+        superAdminOnly: true },
+    ],
+  },
+  {
+    title: 'الأمان والنظام',
+    items: [
+      { label: 'سجل العمليات',      href: '/audit-logs', icon: ShieldCheck },
+      { label: 'حالة النظام',       href: '/status',     icon: Activity },
+      { label: 'الخصوصية والبيانات', href: '/privacy',    icon: Lock },
+    ],
+  },
+];
 
 export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const pathname = usePathname();
   const { user } = useAuth();
-
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
 
-  const navItems = [
-    { label: 'الرئيسية (Dashboard)', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'حجز اليوم', href: '/appointments', icon: CalendarDays },
-    { label: 'جدول المواعيد', href: '/calendar', icon: Calendar },
-    { label: 'طابور الانتظار', href: '/queue', icon: Users },
-    { label: 'شاشة الانتظار العامة (TV)', href: '/queue/display', icon: Monitor, isPublic: true },
-    { label: 'المحادثات والتدخل البشري', href: '/conversations', icon: MessageSquareText },
-    { label: 'أداة إضافة عيادة جديدة', href: '/setup-wizard', icon: Sparkles, isNew: true },
-    { label: 'سجل المرضى الإداري', href: '/patients', icon: UserSquare2 },
-    { label: 'قوالب الواتساب', href: '/templates', icon: FileText },
-    { label: 'التذكيرات الآلية', href: '/reminders', icon: BellRing },
-    { label: 'محاكي تجربة الواتساب', href: '/test-bot', icon: Bot, isNew: true },
-    { label: 'دليل العيادات العام (Public)', href: '/clinics', icon: Globe, isPublic: true },
-    { label: 'إعدادات العيادة والمعلومات', href: '/settings/clinic', icon: Settings },
-    { label: 'ربط Meta & Google', href: '/settings/integrations', icon: Share2 },
-    ...(isSuperAdmin ? [{ label: 'إدارة العيادات (Super Admin)', href: '/admin/clinics', icon: Building }] : []),
-    { label: 'سجل العمليات والأمان', href: '/audit-logs', icon: ShieldCheck },
-    { label: 'حالة النظام التشغيلية', href: '/status', icon: Activity },
-    { label: 'الخصوصية والموافقة', href: '/privacy', icon: Lock },
-  ];
+  const badgeClasses = {
+    blue:  'bg-blue-50 text-blue-700',
+    green: 'bg-emerald-50 text-emerald-700',
+    amber: 'bg-amber-50 text-amber-700',
+  };
 
   return (
     <>
-      {/* Mobile Backdrop */}
+      {/* Mobile backdrop */}
       {isOpen && (
-        <div 
-          onClick={onClose} 
-          className="fixed inset-0 z-40 bg-navy-950/60 backdrop-blur-sm lg:hidden"
-        />
+        <div onClick={onClose}
+          className="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-sm lg:hidden" />
       )}
 
-      <aside
-        className={`fixed top-16 right-0 z-40 w-64 h-[calc(100vh-4rem)] bg-white border-l border-slate-200 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
-          isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'
-        } overflow-y-auto flex flex-col justify-between`}
-      >
-        <div className="p-4 space-y-1">
-          <div className="px-3.5 py-2 text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
-            قائمة النظام الرئيسية
-          </div>
+      <aside className={`
+        fixed top-14 right-0 z-30 w-60
+        h-[calc(100vh-3.5rem)] bg-white border-l border-slate-200
+        overflow-y-auto flex flex-col transition-transform duration-250 ease-out
+        lg:translate-x-0
+        ${isOpen ? 'translate-x-0 shadow-xl' : 'translate-x-full'}
+      `}>
 
-          {navItems.map(item => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
+        {/* Nav Groups */}
+        <nav className="flex-1 p-3 space-y-5">
+          {navGroups.map(group => {
+            const visibleItems = group.items.filter(
+              item => !item.superAdminOnly || isSuperAdmin
+            );
+            if (visibleItems.length === 0) return null;
 
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onClose}
-                className={`flex items-center space-x-3 space-x-reverse px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
-                  isActive
-                    ? 'bg-cobalt-600 text-white shadow-md shadow-cobalt-600/20 font-bold'
-                    : 'text-slate-700 hover:bg-slate-100 hover:text-cobalt-700'
-                }`}
-              >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
-                <span className="truncate">{item.label}</span>
-                {item.isPublic && (
-                  <span className="mr-auto text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-bold">
-                    عامة
-                  </span>
-                )}
-                {item.isNew && (
-                  <span className="mr-auto text-[9px] bg-mint-100 text-mint-800 px-1.5 py-0.5 rounded font-bold">
-                    جديد
-                  </span>
-                )}
-              </Link>
+              <div key={group.title}>
+                <p className="px-2.5 mb-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  {group.title}
+                </p>
+                <div className="space-y-0.5">
+                  {visibleItems.map(item => {
+                    const Icon = item.icon;
+                    const active = pathname === item.href;
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={onClose}
+                        className={`
+                          flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-semibold
+                          transition-all duration-150 group
+                          ${active
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}
+                        `}
+                      >
+                        <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-white' : 'text-slate-400 group-hover:text-slate-600'}`} />
+                        <span className="truncate flex-1">{item.label}</span>
+                        {item.badge && !active && (
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
+                            badgeClasses[item.badgeColor ?? 'blue']
+                          }`}>
+                            {item.badge}
+                          </span>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
             );
           })}
+        </nav>
+
+        {/* Footer: Medical Disclaimer */}
+        <div className="p-3 border-t border-slate-100">
+          <div className="flex gap-2.5 p-3 bg-amber-50 border border-amber-200 rounded-xl">
+            <HelpCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="text-[10px] font-bold text-amber-900 mb-0.5">تنبيه طبي مهم</p>
+              <p className="text-[10px] text-amber-700 leading-relaxed">
+                النظام للحجز الإداري فقط. لا يُقدّم أي استشارات أو تشخيصات طبية.
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Footer Medical Disclaimer Banner */}
-        <div className="p-4 m-3 bg-blue-50 border border-blue-200 rounded-2xl text-blue-950 text-[11px] space-y-1">
-          <div className="font-bold flex items-center gap-1.5 text-cobalt-800">
-            <HelpCircle className="w-4 h-4 text-cobalt-600 shrink-0" />
-            تنبيه السلامة الطبية
-          </div>
-          <p className="leading-snug text-[10px] text-slate-600">
-            النظام مخصص للتواصل الإداري وحجز المواعيد فقط. يُمنع التشخيص أو الاستشارة الطبية آلياً.
-          </p>
-        </div>
       </aside>
     </>
   );

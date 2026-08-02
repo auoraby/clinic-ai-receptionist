@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useClinic } from '@/lib/context/clinic-context';
 import { clinicStore } from '@/lib/store';
 import { UserSquare2, Search, Phone, FileText, Calendar, ShieldCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function PatientsPage() {
   const { activeClinic } = useClinic();
@@ -15,16 +16,15 @@ export default function PatientsPage() {
   const filtered = patients.filter(p => p.name.includes(search) || p.phone.includes(search));
 
   return (
-    <div className="space-y-6 dir-rtl">
-      
+    <div className="page-wrapper animate-fade-up">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="card p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
-            <UserSquare2 className="w-6 h-6 text-teal-600" />
+          <h1 className="text-xl font-black text-slate-900 flex items-center gap-2">
+            <UserSquare2 className="w-5 h-5 text-blue-600" />
             سجل المرضى الإداري
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 mt-1 font-medium">
             الحد الأدنى من البيانات الإدارية المسجلة لـ {activeClinic.name}
           </p>
         </div>
@@ -36,30 +36,33 @@ export default function PatientsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="بحث باسم المريض أو الهواتف..."
-            className="w-full pr-9 pl-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500"
+            className="input w-full pr-9"
           />
         </div>
       </div>
 
       {/* Compliance Note */}
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 text-amber-900 text-xs flex items-center gap-2">
-        <ShieldCheck className="w-4 h-4 text-amber-700 shrink-0" />
+      <motion.div whileHover={{ y: -2 }} className="badge badge-amber p-4 mb-6 w-full text-xs font-medium flex items-center gap-2 rounded-xl text-amber-900 bg-amber-50 border border-amber-200">
+        <ShieldCheck className="w-4 h-4 shrink-0 text-amber-600" />
         تنويه حماية البيانات: يحتوي النظام على السجلات الإدارية والتواصل فقط دون تخزين أي ملفات أو تشخيصات أو روشتات طبية.
-      </div>
+      </motion.div>
 
       {/* Patients Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <table className="w-full text-right text-xs">
-          <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
+      <div className="card overflow-hidden">
+        <div className="px-5 pt-5 pb-3">
+          <h2 className="text-sm font-bold text-slate-900">سجل المرضى</h2>
+        </div>
+        <table className="table-clean w-full text-right">
+          <thead>
             <tr>
-              <th className="p-3.5">اسم المريض</th>
-              <th className="p-3.5">رقم الواتساب</th>
-              <th className="p-3.5">سجل المواعيد السابق</th>
-              <th className="p-3.5">تفضيل التواصل</th>
-              <th className="p-3.5">ملاحظات إدارية</th>
+              <th>المريض</th>
+              <th>رقم الواتساب</th>
+              <th>سجل المواعيد</th>
+              <th>التواصل</th>
+              <th>ملاحظات</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+          <tbody>
             {filtered.length === 0 ? (
               <tr>
                 <td colSpan={5} className="text-center py-10 text-slate-400">
@@ -71,22 +74,31 @@ export default function PatientsPage() {
                 const history = appointments.filter(a => a.patientId === pat.id);
 
                 return (
-                  <tr key={pat.id} className="hover:bg-slate-50 transition">
-                    <td className="p-3.5 font-bold text-slate-900">{pat.name}</td>
-                    <td className="p-3.5 font-mono text-slate-600 flex items-center gap-1">
-                      <Phone className="w-3.5 h-3.5 text-teal-600" /> {pat.phone}
+                  <tr key={pat.id}>
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs">
+                          {pat.name.charAt(0)}
+                        </div>
+                        <span className="font-bold text-slate-900">{pat.name}</span>
+                      </div>
                     </td>
-                    <td className="p-3.5">
-                      <span className="bg-teal-50 text-teal-800 text-[10px] font-bold px-2 py-0.5 rounded border border-teal-200">
+                    <td>
+                      <div className="flex items-center gap-1 text-slate-600 font-mono text-xs">
+                        <Phone className="w-3.5 h-3.5 text-blue-600" /> {pat.phone}
+                      </div>
+                    </td>
+                    <td>
+                      <span className="badge badge-blue">
                         {history.length} حجز مسجل
                       </span>
                     </td>
-                    <td className="p-3.5">
-                      <span className="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">
+                    <td>
+                      <span className="badge badge-green">
                         {pat.communicationPref}
                       </span>
                     </td>
-                    <td className="p-3.5 text-slate-500 text-[11px]">{pat.notes || 'لا يوجد'}</td>
+                    <td className="text-slate-500 text-xs">{pat.notes || 'لا يوجد'}</td>
                   </tr>
                 );
               })
@@ -94,7 +106,6 @@ export default function PatientsPage() {
           </tbody>
         </table>
       </div>
-
     </div>
   );
 }
