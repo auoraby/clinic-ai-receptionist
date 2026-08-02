@@ -70,7 +70,7 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
         } overflow-y-auto flex flex-col justify-between`}
       >
         <div className="p-4 space-y-1">
-          <div className="px-3 py-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+          <div className="px-3.5 py-2 text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
             قائمة النظام الرئيسية
           </div>
 
@@ -85,8 +85,8 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
                 onClick={onClose}
                 className={`flex items-center space-x-3 space-x-reverse px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
                   isActive
-                    ? 'bg-teal-600 text-white shadow-md shadow-teal-600/20 font-bold'
-                    : 'text-slate-700 hover:bg-slate-100 hover:text-teal-700'
+                    ? 'bg-cobalt-600 text-white shadow-md shadow-cobalt-600/20 font-bold'
+                    : 'text-slate-700 hover:bg-slate-100 hover:text-cobalt-700'
                 }`}
               >
                 <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
@@ -97,7 +97,7 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
                   </span>
                 )}
                 {item.isNew && (
-                  <span className="mr-auto text-[9px] bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded font-bold">
+                  <span className="mr-auto text-[9px] bg-mint-100 text-mint-800 px-1.5 py-0.5 rounded font-bold">
                     جديد
                   </span>
                 )}
@@ -107,12 +107,12 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
         </div>
 
         {/* Footer Medical Disclaimer Banner */}
-        <div className="p-4 m-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-[11px] space-y-1">
-          <div className="font-bold flex items-center gap-1">
-            <HelpCircle className="w-3.5 h-3.5 text-amber-700 inline" />
+        <div className="p-4 m-3 bg-blue-50 border border-blue-200 rounded-2xl text-blue-950 text-[11px] space-y-1">
+          <div className="font-bold flex items-center gap-1.5 text-cobalt-800">
+            <HelpCircle className="w-4 h-4 text-cobalt-600 shrink-0" />
             تنبيه السلامة الطبية
           </div>
-          <p className="leading-snug text-[10px] text-amber-800">
+          <p className="leading-snug text-[10px] text-slate-600">
             النظام مخصص للتواصل الإداري وحجز المواعيد فقط. يُمنع التشخيص أو الاستشارة الطبية آلياً.
           </p>
         </div>

@@ -9,13 +9,12 @@ import {
   Building2, 
   UserCheck, 
   Bot, 
-  ShieldAlert, 
-  Search, 
   Menu, 
-  X, 
   LogOut, 
   CheckCircle2,
-  ChevronDown
+  ChevronDown,
+  Sparkles,
+  HeartPulse
 } from 'lucide-react';
 
 export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
@@ -25,28 +24,28 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
   const [showClinicDropdown, setShowClinicDropdown] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-navy-900 text-white shadow-md border-b border-navy-800">
+    <header className="sticky top-0 z-40 bg-cobalt-950 text-white shadow-lg border-b border-cobalt-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Right Section: Mobile Toggle & Brand Logo */}
         <div className="flex items-center space-x-3 space-x-reverse">
           <button
             onClick={onToggleSidebar}
-            className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-navy-800 lg:hidden focus:outline-none"
+            className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-cobalt-900 lg:hidden focus:outline-none"
             aria-label="القائمة"
           >
             <Menu className="w-6 h-6" />
           </button>
 
           <Link href="/dashboard" className="flex items-center space-x-2.5 space-x-reverse group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-limeAccent-500 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-              <Bot className="w-6 h-6 text-navy-900" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cobalt-500 to-mint-400 flex items-center justify-center shadow-lg shadow-cobalt-500/20 group-hover:scale-105 transition-transform">
+              <HeartPulse className="w-6 h-6 text-white" />
             </div>
             <div>
               <span className="font-extrabold text-lg tracking-tight text-white block leading-tight">
-                مستقبل العيادة <span className="text-teal-400 font-bold text-sm">الذكي</span>
+                مستقبل العيادة <span className="text-mint-300 font-bold text-sm">الذكي</span>
               </span>
-              <span className="text-[10px] text-teal-300 font-medium block">Meta WhatsApp AI Receptionist</span>
+              <span className="text-[10px] text-cobalt-200 font-medium block">Meta WhatsApp AI Receptionist</span>
             </div>
           </Link>
         </div>
@@ -56,16 +55,16 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
           <div className="relative">
             <button
               onClick={() => setShowClinicDropdown(!showClinicDropdown)}
-              className="flex items-center space-x-2 space-x-reverse bg-navy-800 border border-navy-700 hover:border-teal-500/50 px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-200 transition"
+              className="flex items-center space-x-2 space-x-reverse bg-cobalt-900 border border-cobalt-800 hover:border-mint-400/50 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-100 transition shadow-sm"
             >
-              <Building2 className="w-4 h-4 text-teal-400" />
+              <Building2 className="w-4 h-4 text-mint-400" />
               <span className="max-w-[200px] truncate">{activeClinic.name}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronDown className="w-3.5 h-3.5 text-slate-300" />
             </button>
 
             {showClinicDropdown && (
-              <div className="absolute right-0 mt-2 w-72 bg-navy-800 border border-navy-700 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2">
-                <div className="px-3 py-1.5 text-[11px] font-bold text-teal-400 border-b border-navy-700">
+              <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2 text-slate-900">
+                <div className="px-3.5 py-2 text-[11px] font-extrabold text-cobalt-700 bg-slate-50 border-b border-slate-100">
                   اختيار العيادة / المركز الطبي
                 </div>
                 {clinics.map(c => (
@@ -75,15 +74,15 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
                       selectClinic(c.id);
                       setShowClinicDropdown(false);
                     }}
-                    className={`w-full text-right px-3 py-2 text-xs flex items-center justify-between hover:bg-navy-700 ${
-                      activeClinic.id === c.id ? 'text-teal-300 font-bold bg-navy-700/50' : 'text-slate-300'
+                    className={`w-full text-right px-3.5 py-2.5 text-xs flex items-center justify-between hover:bg-slate-50 transition ${
+                      activeClinic.id === c.id ? 'text-cobalt-700 font-bold bg-cobalt-50/80' : 'text-slate-700'
                     }`}
                   >
                     <div>
-                      <div className="truncate">{c.name}</div>
+                      <div className="truncate font-bold">{c.name}</div>
                       <div className="text-[10px] text-slate-400">{c.doctorName}</div>
                     </div>
-                    {activeClinic.id === c.id && <CheckCircle2 className="w-4 h-4 text-teal-400" />}
+                    {activeClinic.id === c.id && <CheckCircle2 className="w-4 h-4 text-cobalt-600" />}
                   </button>
                 ))}
               </div>
@@ -97,16 +96,16 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
           <div className="relative">
             <button
               onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-              className="flex items-center space-x-1.5 space-x-reverse bg-teal-900/60 border border-teal-500/40 px-3 py-1.5 rounded-lg text-xs font-bold text-teal-200 hover:bg-teal-900 transition"
+              className="flex items-center space-x-1.5 space-x-reverse bg-mint-950/80 border border-mint-500/40 px-3 py-1.5 rounded-xl text-xs font-bold text-mint-200 hover:bg-mint-900 transition shadow-sm"
             >
-              <UserCheck className="w-4 h-4 text-teal-300" />
+              <UserCheck className="w-4 h-4 text-mint-300" />
               <span>{user?.name} ({getRoleBadgeAr(user?.role)})</span>
               <ChevronDown className="w-3.5 h-3.5" />
             </button>
 
             {showRoleDropdown && (
-              <div className="absolute left-0 mt-2 w-64 bg-navy-800 border border-navy-700 rounded-xl shadow-2xl py-2 z-50">
-                <div className="px-3 py-1.5 text-[11px] font-bold text-teal-400 border-b border-navy-700">
+              <div className="absolute left-0 mt-2 w-64 bg-white border border-slate-200 rounded-2xl shadow-2xl py-2 z-50 text-slate-900">
+                <div className="px-3.5 py-2 text-[11px] font-extrabold text-cobalt-700 bg-slate-50 border-b border-slate-100">
                   تجربة أدوار المستخدمين
                 </div>
                 {INITIAL_USERS.map(u => (
@@ -116,15 +115,15 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
                       switchUserRole(u.id);
                       setShowRoleDropdown(false);
                     }}
-                    className={`w-full text-right px-3 py-2 text-xs hover:bg-navy-700 flex items-center justify-between ${
-                      user?.id === u.id ? 'text-teal-300 font-bold bg-navy-700' : 'text-slate-300'
+                    className={`w-full text-right px-3.5 py-2 text-xs hover:bg-slate-50 flex items-center justify-between transition ${
+                      user?.id === u.id ? 'text-cobalt-700 font-bold bg-cobalt-50' : 'text-slate-700'
                     }`}
                   >
                     <div>
-                      <div>{u.name}</div>
+                      <div className="font-bold">{u.name}</div>
                       <div className="text-[10px] text-slate-400">{u.email}</div>
                     </div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-navy-900 border border-navy-700">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
                       {getRoleBadgeAr(u.role)}
                     </span>
                   </button>
@@ -136,7 +135,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
           <Link
             href="/login"
             onClick={logout}
-            className="p-2 rounded-lg text-slate-300 hover:text-red-400 hover:bg-navy-800 transition"
+            className="p-2 rounded-xl text-slate-300 hover:text-red-400 hover:bg-cobalt-900 transition"
             title="تسجيل الخروج"
           >
             <LogOut className="w-5 h-5" />

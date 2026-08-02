@@ -9,20 +9,15 @@ import {
   Users, 
   CalendarCheck, 
   Clock, 
-  MessageSquare, 
   AlertTriangle, 
-  UserPlus, 
   CheckCircle2, 
   Search, 
-  ArrowRight, 
   Play, 
   Bot, 
-  Phone,
-  RefreshCw,
-  BellRing,
-  ShieldCheck,
+  BellRing, 
   PlusCircle,
-  Building
+  Stethoscope,
+  HeartPulse
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -43,9 +38,7 @@ export default function DashboardPage() {
   const todayConfirmed = allAppointments.filter(a => a.status === 'CONFIRMED' || a.status === 'IN_CONSULTATION' || a.status === 'PATIENT_ARRIVED');
   const activeInConsult = queue.find(q => q.status === 'IN_CONSULTATION');
   const waitingPatients = queue.filter(q => q.status === 'WAITING');
-  const cancelledAppointments = allAppointments.filter(a => a.status === 'CANCELLED');
   const humanInterventionRequired = conversations.filter(c => c.isHumanTakeover);
-  const unansweredChats = conversations.filter(c => c.unreadCount > 0);
 
   // Search filter
   const filteredAppointments = allAppointments.filter(a => 
@@ -59,116 +52,116 @@ export default function DashboardPage() {
     refreshData();
   };
 
-  const isDoctor = user?.role === 'DOCTOR' || user?.role === 'SUPER_ADMIN';
-
   return (
-    <div className="space-y-6 dir-rtl">
+    <div className="space-y-6 dir-rtl font-arabic">
       
-      {/* Top Banner Header */}
-      <div className="bg-gradient-to-r from-navy-900 via-navy-800 to-teal-900 rounded-2xl p-6 text-white shadow-xl border border-navy-700/80 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      {/* Top Banner Header - Clean Royal Cobalt Blue Banner */}
+      <div className="bg-gradient-to-r from-cobalt-900 via-cobalt-800 to-cobalt-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-cobalt-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="bg-teal-500/20 text-teal-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-teal-500/40">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="bg-mint-500/20 text-mint-300 text-[11px] font-extrabold px-3 py-1 rounded-full border border-mint-500/40 flex items-center gap-1.5">
+              <Stethoscope className="w-3.5 h-3.5 text-mint-400" />
               {activeClinic.doctorName} - {activeClinic.specialty}
             </span>
-            <span className="bg-lime-500/20 text-limeAccent-400 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-lime-500/30">
+            <span className="bg-white/10 text-white text-[11px] font-extrabold px-3 py-1 rounded-full border border-white/20">
               🤖 WhatsApp AI Webhook Active
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight">
+
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
             لوحة تحكم {activeClinic.name}
           </h1>
-          <p className="text-xs text-slate-300 mt-1">
-            مرحباً {user?.name}! تتبع المواعيد، طابور الانتظار، واستفسارات الواتساب في مكان واحد.
+          <p className="text-xs sm:text-sm text-cobalt-200 mt-1">
+            مرحباً {user?.name}! متابعة فورية لحجوزات الواتساب، طابور الانتظار، وتقويم الكشوفات.
           </p>
         </div>
 
         {/* Global Quick Search */}
-        <div className="w-full md:w-72 relative">
-          <Search className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
+        <div className="w-full md:w-80 relative">
+          <Search className="w-4 h-4 text-slate-400 absolute right-3.5 top-3.5" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="بحث باسم المريض أو الموعد..."
-            className="w-full bg-navy-950/80 border border-navy-700 rounded-xl pr-9 pl-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            placeholder="بحث باسم المريض أو رقم الهاتف..."
+            className="w-full bg-white text-slate-900 border border-slate-200 rounded-2xl pr-10 pl-4 py-2.5 text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cobalt-500 shadow-inner"
           />
         </div>
       </div>
 
-      {/* Primary KPI Cards Grid */}
+      {/* Primary KPI Cards Grid - Clean White Cards with Cobalt Accents */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Card 1: Today's Confirmed */}
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+        <div className="clinical-card p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500">مواعيد اليوم المؤكدة</span>
-            <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-cobalt-50 text-cobalt-600 flex items-center justify-center">
               <CalendarCheck className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 mt-2">{todayConfirmed.length}</div>
-          <div className="text-[11px] text-teal-600 font-semibold mt-1 flex items-center gap-1">
+          <div className="text-3xl font-black text-slate-900 mt-3">{todayConfirmed.length}</div>
+          <div className="text-[11px] text-cobalt-600 font-bold mt-1.5 flex items-center gap-1">
             <CheckCircle2 className="w-3.5 h-3.5" />
-            تحديث مباشر مع Google Calendar
+            متزامن مع Google Calendar
           </div>
         </div>
 
         {/* Card 2: Current Queue */}
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+        <div className="clinical-card p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500">الطابور والمقيدين</span>
-            <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+            <span className="text-xs font-bold text-slate-500">طابور الانتظار الحالي</span>
+            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
               <Clock className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 mt-2">{waitingPatients.length} ينتظرون</div>
-          <div className="text-[11px] text-amber-600 font-semibold mt-1">
+          <div className="text-3xl font-black text-slate-900 mt-3">{waitingPatients.length} ينتظرون</div>
+          <div className="text-[11px] text-amber-700 font-bold mt-1.5">
             متوسط وقت الكشف: {activeClinic.avgConsultationMins} دقيقة
           </div>
         </div>
 
         {/* Card 3: Unanswered / Human Intervention */}
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+        <div className="clinical-card p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500">رسائل تتطلب تدخلاً بشرياً</span>
-            <div className="w-9 h-9 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center">
               <AlertTriangle className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-black text-red-600 mt-2">{humanInterventionRequired.length}</div>
-          <div className="text-[11px] text-red-500 font-semibold mt-1">
+          <div className="text-3xl font-black text-red-600 mt-3">{humanInterventionRequired.length}</div>
+          <div className="text-[11px] text-red-600 font-bold mt-1.5">
             تم إيقاف الرد الآلي حمايةً للمريض
           </div>
         </div>
 
         {/* Card 4: Reminder Delivery */}
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+        <div className="clinical-card p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500">حالة التذكيرات الآلية</span>
-            <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <span className="text-xs font-bold text-slate-500">التذكيرات الآلية المجدولة</span>
+            <div className="w-10 h-10 rounded-2xl bg-mint-50 text-mint-700 flex items-center justify-center">
               <BellRing className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 mt-2">{reminders.length} مجدولة</div>
-          <div className="text-[11px] text-purple-600 font-semibold mt-1">
-            24 ساعة و 2 ساعة قبل الموعد
+          <div className="text-3xl font-black text-slate-900 mt-3">{reminders.length} مجدولة</div>
+          <div className="text-[11px] text-mint-700 font-bold mt-1.5">
+            تصل للمريض قبل الموعد تلقائياً
           </div>
         </div>
 
       </div>
 
       {/* Queue Controller Action Panel */}
-      <div className="bg-gradient-to-r from-teal-900 to-navy-900 rounded-2xl p-6 text-white shadow-lg border border-teal-800/80 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-mint-950 via-cobalt-950 to-navy-950 rounded-3xl p-6 text-white shadow-xl border border-mint-800/60 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-2">
-          <span className="text-xs font-bold text-teal-300 uppercase tracking-wide">
-            غرفة الانتظار الحالية 🏥
+          <span className="text-xs font-bold text-mint-300 bg-mint-900/60 px-3 py-1 rounded-full border border-mint-500/40">
+            🏥 غرفة الانتظار الحالية
           </span>
           <div className="flex items-center gap-4">
             <div>
-              <div className="text-[11px] text-slate-300">المريض الحالي داخل العيادة:</div>
-              <div className="text-lg font-black text-limeAccent-400">
-                {activeInConsult ? `رقم ${activeInConsult.queueNumber} - ${activeInConsult.patientName}` : 'لا يوجد مريض كشف حالياً'}
+              <div className="text-xs text-slate-300">المريض الحالي داخل غرفة الكشف:</div>
+              <div className="text-xl font-black text-mint-300 mt-0.5">
+                {activeInConsult ? `رقم ${activeInConsult.queueNumber} - ${activeInConsult.patientName}` : 'لا يوجد مريض داخل غرفة الكشف حالياً'}
               </div>
             </div>
           </div>
@@ -178,7 +171,7 @@ export default function DashboardPage() {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handleCallNext}
-            className="px-5 py-2.5 bg-limeAccent-500 hover:bg-limeAccent-600 text-navy-950 font-black text-xs rounded-xl shadow-lg shadow-limeAccent-500/20 flex items-center gap-2 transition transform active:scale-95"
+            className="px-6 py-3 bg-mint-500 hover:bg-mint-600 text-slate-950 font-black text-xs rounded-2xl shadow-lg shadow-mint-500/20 flex items-center gap-2 transition transform active:scale-95 whitespace-nowrap"
           >
             <Play className="w-4 h-4 fill-current" />
             استدعاء المريض التالي
@@ -186,15 +179,15 @@ export default function DashboardPage() {
 
           <Link
             href="/queue"
-            className="px-4 py-2.5 bg-navy-800 hover:bg-navy-700 border border-navy-700 text-white font-bold text-xs rounded-xl flex items-center gap-2 transition"
+            className="px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-2xl border border-white/20 flex items-center gap-2 transition"
           >
-            <Users className="w-4 h-4 text-teal-400" />
+            <Users className="w-4 h-4 text-mint-300" />
             إدارة الطابور بالكامل
           </Link>
 
           <Link
             href="/appointments"
-            className="px-4 py-2.5 bg-teal-700 hover:bg-teal-600 text-white font-bold text-xs rounded-xl flex items-center gap-2 transition"
+            className="px-4 py-3 bg-cobalt-600 hover:bg-cobalt-500 text-white font-bold text-xs rounded-2xl flex items-center gap-2 transition shadow-md"
           >
             <PlusCircle className="w-4 h-4" />
             حجز موعد جديد
@@ -206,40 +199,40 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Left 2 Columns: Today's Appointments List */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div className="lg:col-span-2 clinical-card p-6 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2">
-              <CalendarCheck className="w-5 h-5 text-teal-600" />
+              <CalendarCheck className="w-5 h-5 text-cobalt-600" />
               <h2 className="font-extrabold text-slate-900 text-sm">جدول حتوزات اليوم والمواعيد</h2>
             </div>
-            <Link href="/appointments" className="text-xs font-bold text-teal-600 hover:underline">
+            <Link href="/appointments" className="text-xs font-bold text-cobalt-600 hover:underline">
               عرض الكل ({filteredAppointments.length})
             </Link>
           </div>
 
           <div className="space-y-3">
             {filteredAppointments.length === 0 ? (
-              <div className="text-center py-8 text-slate-400 text-xs">
+              <div className="text-center py-10 text-slate-400 text-xs">
                 لا توجد مواعيد مسجلة تطابق البحث اليوم
               </div>
             ) : (
               filteredAppointments.map(apt => (
                 <div 
                   key={apt.id}
-                  className="p-3.5 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-slate-100/80 transition flex items-center justify-between gap-3"
+                  className="p-4 rounded-2xl border border-slate-100 bg-slate-50/60 hover:bg-slate-100/80 transition flex items-center justify-between gap-3"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 font-black text-xs flex items-center justify-center">
+                    <div className="w-11 h-11 rounded-2xl bg-cobalt-100 text-cobalt-800 font-black text-xs flex items-center justify-center shadow-sm">
                       {new Date(apt.startDateTime).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-slate-900">{apt.patientName}</div>
-                      <div className="text-[11px] text-slate-500">{apt.appointmentTypeName} • {apt.patientPhone}</div>
+                      <div className="text-xs font-extrabold text-slate-900">{apt.patientName}</div>
+                      <div className="text-[11px] text-slate-500 font-medium">{apt.appointmentTypeName} • {apt.patientPhone}</div>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${getStatusBadgeClass(apt.status)}`}>
+                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full ${getStatusBadgeClass(apt.status)}`}>
                       {getStatusLabelAr(apt.status)}
                     </span>
                     <button 
@@ -247,7 +240,7 @@ export default function DashboardPage() {
                         clinicStore.markPatientArrived(activeClinic.id, apt.patientId, apt.patientName, apt.patientPhone, apt.id);
                         refreshData();
                       }}
-                      className="px-2.5 py-1 bg-teal-600 hover:bg-teal-700 text-white text-[10px] font-bold rounded-lg transition"
+                      className="px-3 py-1.5 bg-cobalt-600 hover:bg-cobalt-700 text-white text-[10px] font-bold rounded-xl transition shadow-sm"
                     >
                       وصل للعيادة
                     </button>
@@ -259,13 +252,13 @@ export default function DashboardPage() {
         </div>
 
         {/* Right 1 Column: Unanswered Conversations & Medical Safeguard Alerts */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div className="clinical-card p-6 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2">
-              <Bot className="w-5 h-5 text-teal-600" />
+              <Bot className="w-5 h-5 text-cobalt-600" />
               <h2 className="font-extrabold text-slate-900 text-sm">المحادثات والتدخل البشري</h2>
             </div>
-            <Link href="/conversations" className="text-xs font-bold text-teal-600 hover:underline">
+            <Link href="/conversations" className="text-xs font-bold text-cobalt-600 hover:underline">
               عرض الردود
             </Link>
           </div>
@@ -274,30 +267,30 @@ export default function DashboardPage() {
             {conversations.slice(0, 4).map(conv => (
               <div 
                 key={conv.id}
-                className={`p-3 rounded-xl border transition ${
+                className={`p-3.5 rounded-2xl border transition ${
                   conv.isHumanTakeover 
-                    ? 'border-red-200 bg-red-50/40' 
+                    ? 'border-red-200 bg-red-50/50' 
                     : 'border-slate-100 bg-white hover:bg-slate-50'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold text-slate-900">{conv.patientName}</span>
                   {conv.isHumanTakeover ? (
-                    <span className="text-[9px] font-black bg-red-100 text-red-700 px-2 py-0.5 rounded-full border border-red-200">
+                    <span className="text-[9px] font-black bg-red-100 text-red-700 px-2.5 py-0.5 rounded-full border border-red-200">
                       ⚠️ تدخّل بشري
                     </span>
                   ) : (
-                    <span className="text-[9px] font-bold bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full">
+                    <span className="text-[9px] font-bold bg-mint-100 text-mint-800 px-2.5 py-0.5 rounded-full">
                       🤖 بوت نشط
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">
+                <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed font-medium">
                   {conv.lastMessageText}
                 </p>
                 <div className="mt-2 text-[10px] text-slate-400 flex items-center justify-between">
                   <span>{new Date(conv.lastMessageTime).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}</span>
-                  <Link href="/conversations" className="text-teal-600 font-bold hover:underline">
+                  <Link href="/conversations" className="text-cobalt-600 font-bold hover:underline">
                     فتح المحادثة ←
                   </Link>
                 </div>
@@ -314,9 +307,9 @@ export default function DashboardPage() {
 
 function getStatusBadgeClass(status: string) {
   switch (status) {
-    case 'IN_CONSULTATION': return 'bg-lime-100 text-lime-800 border border-lime-300';
-    case 'PATIENT_ARRIVED': return 'bg-teal-100 text-teal-800 border border-teal-300';
-    case 'CONFIRMED': return 'bg-emerald-100 text-emerald-800';
+    case 'IN_CONSULTATION': return 'bg-mint-100 text-mint-800 border border-mint-300';
+    case 'PATIENT_ARRIVED': return 'bg-amber-100 text-amber-800 border border-amber-300';
+    case 'CONFIRMED': return 'bg-cobalt-100 text-cobalt-800';
     case 'CANCELLED': return 'bg-red-100 text-red-800';
     default: return 'bg-slate-100 text-slate-700';
   }
