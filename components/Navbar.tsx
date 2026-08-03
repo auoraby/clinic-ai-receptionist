@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/context/auth-context';
 import { useClinic } from '@/lib/context/clinic-context';
 import { INITIAL_USERS } from '@/lib/mock-data';
+import Logo from '@/components/Logo';
 import { 
-  HeartPulse, Menu, LogOut, ChevronDown, CheckCircle2,
-  Building2, UserCog, Bell, Stethoscope
+  Menu, LogOut, ChevronDown, CheckCircle2,
+  Building2, UserCog, Bell
 } from 'lucide-react';
 
 export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
@@ -45,19 +46,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
             <Menu className="w-5 h-5" />
           </button>
 
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm">
-              <HeartPulse className="w-4.5 h-4.5 text-white w-[18px] h-[18px]" />
-            </div>
-            <div className="hidden sm:block">
-              <span className="font-black text-sm text-slate-900 tracking-tight leading-none block">
-                مستقبل العيادة
-              </span>
-              <span className="text-[10px] font-semibold text-slate-400 leading-none block mt-0.5">
-                الذكي AI Receptionist
-              </span>
-            </div>
-          </Link>
+          <Logo size="sm" showTagline={true} />
         </div>
 
         {/* ── Center: Clinic Switcher ──────── */}

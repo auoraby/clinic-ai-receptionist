@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clinicStore } from '@/lib/store';
+import Logo from '@/components/Logo';
 import {
-  HeartPulse, MapPin, Clock, Phone, CalendarDays,
+  MapPin, Clock, Phone, CalendarDays,
   CheckCircle2, Bot, Sparkles, MessageCircle, ChevronLeft,
   User, Hash, Star, Shield
 } from 'lucide-react';
@@ -65,16 +66,11 @@ export default function PublicClinicBookingPage() {
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10"
         style={{ boxShadow: '0 1px 3px rgba(0,0,0,.05)' }}>
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/clinics" className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-blue-600 transition">
+          <Link href="/clinics" className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-[#00A8B5] transition">
             <ChevronLeft className="w-4 h-4" />
             دليل العيادات
           </Link>
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center">
-              <HeartPulse className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-black text-slate-900 text-sm hidden sm:block">مستقبل العيادة الذكي</span>
-          </div>
+          <Logo size="sm" showTagline={true} />
         </div>
       </header>
 
@@ -269,7 +265,7 @@ export default function PublicClinicBookingPage() {
       </main>
 
       <footer className="text-center text-[11px] text-slate-400 py-6 border-t border-slate-200 font-medium">
-        مشغّل بواسطة مستقبل العيادة الذكي • Meta WhatsApp AI Receptionist
+        مشغّل بواسطة <strong className="text-[#00A8B5]">AiYADA</strong> • استقبال ذكي . مواعيد اسهل
       </footer>
     </div>
   );

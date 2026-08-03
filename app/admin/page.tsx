@@ -6,10 +6,11 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/context/auth-context';
 import { clinicStore } from '@/lib/store';
+import Logo from '@/components/Logo';
 import {
   Building2, Users, CalendarCheck, MessageSquareText, TrendingUp,
   Plus, Settings, LogOut, ShieldCheck, Activity, CheckCircle2,
-  HeartPulse, Zap, Clock, DollarSign, ToggleRight
+  Globe, Zap, Clock, DollarSign, ToggleRight
 } from 'lucide-react';
 
 export default function SuperAdminPortal() {
@@ -32,7 +33,7 @@ export default function SuperAdminPortal() {
   const activeClinics = clinics.filter(c => c.isActive).length;
 
   const platformStats = [
-    { label: 'عيادات مفعّلة',        value: activeClinics,        icon: Building2,         color: 'text-blue-600',    bg: 'bg-blue-50' },
+    { label: 'عيادات مفعّلة',        value: activeClinics,        icon: Building2,         color: 'text-[#00A8B5]',    bg: 'bg-[#E6F6F7]' },
     { label: 'إجمالي المرضى',        value: totalPatients,        icon: Users,             color: 'text-emerald-600', bg: 'bg-emerald-50' },
     { label: 'إجمالي المواعيد',      value: totalAppointments,    icon: CalendarCheck,     color: 'text-purple-600',  bg: 'bg-purple-50' },
     { label: 'اشتراكات نشطة',        value: clinics.length,       icon: DollarSign,        color: 'text-amber-600',   bg: 'bg-amber-50' },
@@ -45,15 +46,7 @@ export default function SuperAdminPortal() {
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40"
         style={{ boxShadow: '0 1px 3px rgba(0,0,0,.05)' }}>
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center">
-              <HeartPulse className="w-[18px] h-[18px] text-white" />
-            </div>
-            <div>
-              <span className="font-black text-slate-900 text-sm block leading-none">مستقبل العيادة الذكي</span>
-              <span className="text-[10px] text-blue-600 font-bold block mt-0.5">لوحة إدارة المنصة — Super Admin</span>
-            </div>
-          </div>
+          <Logo size="sm" showTagline={true} />
 
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-purple-50 border border-purple-200">
@@ -270,7 +263,7 @@ export default function SuperAdminPortal() {
             { label: 'معالج إضافة عيادة', href: '/setup-wizard', icon: Plus,         color: 'text-blue-600',    bg: 'bg-blue-50' },
             { label: 'سجل عمليات المنصة', href: '/audit-logs',   icon: ShieldCheck,  color: 'text-purple-600',  bg: 'bg-purple-50' },
             { label: 'حالة النظام',        href: '/status',       icon: Activity,     color: 'text-emerald-600', bg: 'bg-emerald-50' },
-            { label: 'الموقع الرئيسي',     href: '/',             icon: HeartPulse,   color: 'text-slate-600',   bg: 'bg-slate-100' },
+            { label: 'الموقع الرئيسي',     href: '/',             icon: Globe,        color: 'text-slate-600',   bg: 'bg-slate-100' },
           ].map(item => {
             const Icon = item.icon;
             return (

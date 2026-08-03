@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/context/auth-context';
 import { INITIAL_USERS } from '@/lib/mock-data';
-import { HeartPulse, Mail, Lock, ArrowLeft, Zap, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import Logo from '@/components/Logo';
+import { Mail, Lock, ArrowLeft, Zap, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 
 // Demo role presets with passwords shown
 const DEMO_ROLES = [
@@ -81,22 +82,17 @@ export default function LoginPage() {
 
       {/* ── Left Panel: Branding ─────────────────────── */}
       <div className="hidden lg:flex lg:w-[45%] bg-slate-950 flex-col justify-between p-12 text-white">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
-            <HeartPulse className="w-5 h-5 text-white" />
-          </div>
-          <span className="font-black text-base tracking-tight">مستقبل العيادة الذكي</span>
-        </div>
+        <Logo size="lg" variant="light" showTagline={true} />
 
         <div className="space-y-8">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/25 text-blue-300 text-xs font-bold">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00A8B5]/15 border border-[#00A8B5]/30 text-[#00A8B5] text-xs font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
-              منصة أتمتة استقبال العيادات بالذكاء الاصطناعي
+              AiYADA • استقبال ذكي . مواعيد اسهل
             </div>
             <h1 className="text-3xl font-black leading-tight text-white">
               مرحباً بك في<br />
-              <span className="text-blue-400">لوحة التحكم</span>
+              <span className="text-[#00A8B5]">لوحة تحكم AiYADA</span>
             </h1>
             <p className="text-slate-400 text-sm font-medium leading-relaxed">
               سجّل دخولك للوصول لعيادتك وإدارة الواتساب الآلي، الحجوزات، وطابور الانتظار.
@@ -128,11 +124,8 @@ export default function LoginPage() {
         <div className="max-w-md w-full mx-auto space-y-8">
 
           {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center gap-3 mb-2">
-            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
-              <HeartPulse className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-black text-slate-900">مستقبل العيادة الذكي</span>
+          <div className="lg:hidden mb-2">
+            <Logo size="md" showTagline={true} />
           </div>
 
           <div>

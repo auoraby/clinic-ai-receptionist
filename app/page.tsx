@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { processPatientMessage } from '@/lib/ai/ai-bot';
 import { INITIAL_CLINICS } from '@/lib/mock-data';
+import Logo from '@/components/Logo';
 import {
   Bot, Sparkles, CalendarCheck, Users, ShieldCheck,
-  Send, CheckCircle2, Play, Building, MessageSquareText, HeartPulse,
+  Send, CheckCircle2, Play, Building, MessageSquareText,
   ArrowLeft
 } from 'lucide-react';
 
@@ -18,7 +19,7 @@ export default function LandingPage() {
     sender: 'PATIENT' | 'BOT'; text: string; isSafeguard?: boolean;
   }>>([{
     sender: 'BOT',
-    text: `مرحباً بك! 👋\nأنا المستقبل الآلي لعيادة د. سارة.\n\nكيف يمكنني مساعدتك؟\n١. حجز موعد كشف\n٢. مواعيد العمل\n٣. موقع العيادة`,
+    text: `مرحباً بك! 👋\nأنا المستقبل الآلي لعيادة د. سارة (AiYADA).\n\nكيف يمكنني مساعدتك؟\n١. حجز موعد كشف\n٢. مواعيد العمل\n٣. موقع العيادة`,
   }]);
   const [isTyping, setIsTyping] = useState(false);
 
@@ -60,18 +61,13 @@ export default function LandingPage() {
       {/* ── Navbar ─────────────────────────────── */}
       <header className="sticky top-0 z-40 bg-white border-b border-slate-200" style={{ boxShadow: '0 1px 3px rgba(0,0,0,.05)' }}>
         <div className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center">
-              <HeartPulse className="w-[18px] h-[18px] text-white" />
-            </div>
-            <span className="font-black text-slate-900 text-sm">مستقبل العيادة <span className="text-blue-600">الذكي</span></span>
-          </Link>
+          <Logo size="md" showTagline={true} />
 
           <nav className="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-600">
-            <a href="#features" className="hover:text-blue-600 transition">المميزات</a>
-            <a href="#demo"     className="hover:text-blue-600 transition">التجربة التفاعلية</a>
-            <a href="#pricing"  className="hover:text-blue-600 transition">الأسعار</a>
-            <Link href="/clinics" className="hover:text-blue-600 transition">دليل العيادات</Link>
+            <a href="#features" className="hover:text-[#00A8B5] transition">المميزات</a>
+            <a href="#demo"     className="hover:text-[#00A8B5] transition">التجربة التفاعلية</a>
+            <a href="#pricing"  className="hover:text-[#00A8B5] transition">الأسعار</a>
+            <Link href="/clinics" className="hover:text-[#00A8B5] transition">دليل العيادات</Link>
           </nav>
 
           <div className="flex items-center gap-2.5">
@@ -91,14 +87,18 @@ export default function LandingPage() {
           <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.5 }}
             className="space-y-7 text-center lg:text-right">
 
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/25 text-blue-300 text-xs font-bold">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#00A8B5]/15 border border-[#00A8B5]/30 text-[#00A8B5] text-xs font-bold">
               <span className="dot-online" />
-              منصة أتمتة استقبال العيادات بالذكاء الاصطناعي
+              AiYADA • استقبال ذكي . مواعيد اسهل
             </div>
 
             <h1 className="text-4xl sm:text-5xl font-black leading-tight tracking-tight">
-              حوّل واتساب عيادتك إلى{' '}
-              <span className="text-blue-400">مستقبل ذكي يعمل 24/7</span>
+              حوّل عيادتك مع{' '}
+              <span className="text-[#00A8B5]">AiYADA</span>
+              <br />
+              <span className="text-slate-300 text-3xl sm:text-4xl block mt-2 font-bold">
+                استقبال ذكي . مواعيد اسهل
+              </span>
             </h1>
 
             <p className="text-slate-300 text-base leading-relaxed max-w-lg mx-auto lg:mx-0 font-medium">
@@ -272,16 +272,11 @@ export default function LandingPage() {
       {/* ── Footer ────────────────────────────── */}
       <footer className="border-t border-slate-200 bg-white py-10">
         <div className="max-w-7xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-5 text-xs text-slate-500 font-medium">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-xl bg-blue-600 flex items-center justify-center">
-              <HeartPulse className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-bold text-slate-900">مستقبل العيادة الذكي</span>
-          </div>
+          <Logo size="sm" showTagline={true} />
           <div className="flex gap-6">
-            <Link href="/clinics"  className="hover:text-blue-600 transition">دليل العيادات</Link>
-            <Link href="/status"   className="hover:text-blue-600 transition">حالة النظام</Link>
-            <Link href="/privacy"  className="hover:text-blue-600 transition">الخصوصية</Link>
+            <Link href="/clinics"  className="hover:text-[#00A8B5] transition">دليل العيادات</Link>
+            <Link href="/status"   className="hover:text-[#00A8B5] transition">حالة النظام</Link>
+            <Link href="/privacy"  className="hover:text-[#00A8B5] transition">الخصوصية</Link>
           </div>
         </div>
       </footer>

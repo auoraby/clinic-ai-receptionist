@@ -78,10 +78,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ar" dir="rtl">
       <head>
-        <title>مستقبل العيادة الذكي | Clinic AI Receptionist</title>
-        <meta name="description" content="نظام مستقبل العيادة الذكي المعتمد على الذكاء الاصطناعي وواتساب لمراكز التجميل والعيادات الطبية" />
+        <title>AiYADA | استقبال ذكي . مواعيد اسهل</title>
+        <meta name="description" content="منصة AiYADA لأتمتة عيادات التجميل والمراكز الطبية عبر الذكاء الاصطناعي وواتساب - استقبال ذكي . مواعيد اسهل" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <meta name="theme-color" content="#2563EB" />
+        <meta name="theme-color" content="#00A8B5" />
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="antialiased">
