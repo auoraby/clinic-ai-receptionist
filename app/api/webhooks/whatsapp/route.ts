@@ -4,6 +4,8 @@ import { clinicStore } from '@/lib/store';
 import { processPatientMessage } from '@/lib/ai/ai-bot';
 import { sendWhatsAppTextMessage } from '@/lib/whatsapp/send-message';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Meta Webhook Challenge Verification GET Request
  */
