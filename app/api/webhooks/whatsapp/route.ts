@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyWebhookChallenge, verifyWebhookSignature, isDuplicateWebhookEvent } from '@/lib/security/webhook-verify';
 import { clinicStore } from '@/lib/store';
 import { processPatientMessage } from '@/lib/ai/ai-bot';
+import { sendWhatsAppTextMessage } from '@/lib/whatsapp/send-message';
 
 /**
  * Meta Webhook Challenge Verification GET Request
@@ -81,13 +82,22 @@ export async function POST(req: NextRequest) {
     // 5. Execute AI Receptionist Engine
     const botResult = processPatientMessage(targetClinic, fromPhone, senderName, messageText);
 
-    // 6. Record Bot Response & Execute Actions
+    // 6. Record Bot Response & Send Real-Time Reply via Meta API
     clinicStore.addBotMessage(
       targetClinic.id,
       conv.patientId,
       botResult.replyText,
       botResult.isMedicalSafeguardRefusal
     );
+
+    // 7. Dispatch Outbound Reply to Patient WhatsApp
+    const accessToken = process.env.META_WHATSAPP_ACCESS_TOKEN || targetClinic.whatsappVerifyToken;
+    await sendWhatsAppTextMessage({
+      phoneNumberId: targetClinic.whatsappPhoneId,
+      accessToken: accessToken,
+      recipientPhone: fromPhone,
+      messageText: botResult.replyText,
+    });
 
     return NextResponse.json({
       status: 'PROCESSED',
