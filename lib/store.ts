@@ -74,6 +74,10 @@ class ClinicStore {
     return this.users;
   }
 
+  getAllUsers() {
+    return this.users;
+  }
+
   getUserByEmail(email: string) {
     return this.users.find(u => u.email.toLowerCase() === email.toLowerCase());
   }

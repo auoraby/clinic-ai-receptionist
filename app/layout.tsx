@@ -1,46 +1,93 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './globals.css';
-import { AuthProvider } from '@/lib/context/auth-context';
+import { AuthProvider, useAuth } from '@/lib/context/auth-context';
 import { ClinicProvider } from '@/lib/context/clinic-context';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import PwaInstallPrompt from '@/components/PwaInstallPrompt';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+// Public pages that don't need authentication or sidebar
+const PUBLIC_PATHS = ['/', '/login', '/clinics', '/status', '/privacy', '/queue/display'];
+const isPublicPath = (p: string) =>
+  PUBLIC_PATHS.includes(p) || p.startsWith('/c/');
+
+// Super Admin only paths
+const ADMIN_PATHS = ['/admin'];
+const isAdminPath = (p: string) => ADMIN_PATHS.some(a => p.startsWith(a));
+
+function LayoutInner({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, isAuthenticated } = useAuth();
 
-  // Pages that don't need sidebar (Public TV display, status, login)
-  const isBareLayout = ['/login', '/queue/display', '/status', '/privacy'].includes(pathname) || pathname.startsWith('/c/');
+  const isPublic = isPublicPath(pathname);
+  const isBare   = ['/login', '/queue/display', '/privacy'].includes(pathname) || pathname.startsWith('/c/');
 
+  // ── Route Guard ────────────────────────────────────────
+  useEffect(() => {
+    if (isPublic) return;
+
+    // Not logged in → go to login
+    if (!isAuthenticated) {
+      router.replace('/login');
+      return;
+    }
+
+    // Non-admin trying to access /admin → redirect to dashboard
+    if (isAdminPath(pathname) && user?.role !== 'SUPER_ADMIN') {
+      router.replace('/dashboard');
+      return;
+    }
+
+    // Super Admin going to /dashboard → redirect to /admin
+    if (pathname === '/dashboard' && user?.role === 'SUPER_ADMIN') {
+      router.replace('/admin');
+      return;
+    }
+  }, [isAuthenticated, pathname, user, router, isPublic]);
+
+  // Bare layout: no navbar/sidebar (login page, patient booking, TV screen)
+  if (isBare) {
+    return <main>{children}</main>;
+  }
+
+  // Public layout: just landing page / clinics directory (with their own navbar)
+  if (isPublic) {
+    return <>{children}</>;
+  }
+
+  // Protected layout: full sidebar + navbar
+  return (
+    <div className="min-h-screen flex flex-col bg-[#F7F8FA]">
+      <Navbar onToggleSidebar={() => setIsSidebarOpen(o => !o)} />
+      <div className="flex flex-1 min-h-0">
+        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <main className="flex-1 lg:mr-60 p-5 sm:p-6 lg:p-8 min-w-0 overflow-x-hidden">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ar" dir="rtl">
       <head>
         <title>مستقبل العيادة الذكي | Clinic AI Receptionist</title>
         <meta name="description" content="نظام مستقبل العيادة الذكي المعتمد على الذكاء الاصطناعي وواتساب لمراكز التجميل والعيادات الطبية" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-        <meta name="theme-color" content="#0d9488" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="theme-color" content="#2563EB" />
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className="bg-slate-50 text-slate-900 antialiased min-h-screen">
+      <body className="antialiased">
         <AuthProvider>
           <ClinicProvider>
-            {isBareLayout ? (
-              <main>{children}</main>
-            ) : (
-              <div className="min-h-screen flex flex-col">
-                <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-                <div className="flex-1 flex">
-                  <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-                  <main className="flex-1 lg:mr-64 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto transition-all">
-                    {children}
-                  </main>
-                </div>
-              </div>
-            )}
+            <LayoutInner>{children}</LayoutInner>
             <PwaInstallPrompt />
           </ClinicProvider>
         </AuthProvider>
